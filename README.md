@@ -48,3 +48,6 @@ curl --output test1.mp3 -X 'POST'  'http://localhost:8001/tts/generate'  -H 'acc
   "text": "show must go on",
   "use_ssml": false
 }'
+
+curl  'http://localhost:8001/num2words?num=1986&lang=es&converter=year' 
+curl  'http://localhost:8001/num2words?num=1986&lang=es&converter=year' 
