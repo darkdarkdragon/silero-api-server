@@ -71,6 +71,16 @@ class SampleText(BaseModel):
     text: Optional[str]
 
 
+class Num2WordsResponse(BaseModel):
+    words: str
+
+
+class SpeakerDesc(BaseModel):
+    name: str
+    voice_id: str
+    preview_url: str
+
+
 #
 # converter:
 # - cardinal
@@ -79,12 +89,12 @@ class SampleText(BaseModel):
 # - year
 # - currency
 @app.get("/num2words")
-def _num2words(num: int, lang: str, converter: str = "cardinal"):
+def _num2words(num: int, lang: str, converter: str = "cardinal") -> Num2WordsResponse:
     return {"words": num2words(num, lang=lang, to=converter)}
 
 
 @app.get("/tts/speakers")
-def speakers(request: Request):
+def speakers(request: Request) -> dict[str, list[SpeakerDesc]]:
     voices = {
         lang: [
             {
@@ -103,10 +113,19 @@ def remove_file(path: str) -> None:
     os.unlink(path)
 
 
-@app.post("/tts/generate")
-def generate(voice: Voice):
-    if voice.language == 'uk':
-        voice.language = 'ua'
+@app.post(
+    "/tts/generate",
+    response_class=FileResponse,
+    responses={
+        200: {
+            "content": {"audio/mpeg": {}},
+            "description": "Return the MP3 file.",
+        }
+    },
+)
+def generate(voice: Voice) -> FileResponse:
+    if voice.language == "uk":
+        voice.language = "ua"
     # Clean elipses
     voice.text = voice.text.replace("*", "")
     try:
