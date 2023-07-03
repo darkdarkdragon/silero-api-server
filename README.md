@@ -31,3 +31,20 @@ API Docs can be accessed from [http://localhost:8001/docs](http://localhost:8001
 
 # Voice Samples
 Samples are served statically by the web server at `/samples/{speaker}.wav` or callable from the API from `/tts/sample?speaker={speaker}` endpoint.
+
+
+curl -X 'GET'  'http://localhost:8001/tts/speakers'  -H 'accept: application/json' | jq .
+curl -i --output test.mp3 -X 'POST'  'http://localhost:8001/tts/generate'  -H 'accept: application/json'  -H 'Content-Type: application/json' \
+  -d '{
+  "language": "en",
+  "speaker": "en_18",
+  "text": "show must go on",
+  "use_ssml": false
+}'
+curl --output test1.mp3 -X 'POST'  'http://localhost:8001/tts/generate'  -H 'accept: application/json'  -H 'Content-Type: application/json' \
+  -d '{
+  "language": "en",
+  "speaker": "en_18",
+  "text": "show must go on",
+  "use_ssml": false
+}'
