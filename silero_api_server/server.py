@@ -105,6 +105,8 @@ def remove_file(path: str) -> None:
 
 @app.post("/tts/generate")
 def generate(voice: Voice):
+    if voice.language == 'uk':
+        voice.language = 'ua'
     # Clean elipses
     voice.text = voice.text.replace("*", "")
     try:
