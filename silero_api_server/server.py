@@ -13,6 +13,7 @@ from silero_api_server.tts import SileroTtsService
 from loguru import logger
 from typing import Optional, Tuple
 from pydub import AudioSegment
+from num2words import num2words
 
 module_path = pathlib.Path(__file__).resolve().parent
 os.chdir(module_path)
@@ -68,6 +69,18 @@ class Voice(BaseModel):
 
 class SampleText(BaseModel):
     text: Optional[str]
+
+
+#
+# converter:
+# - cardinal
+# - ordinal
+# - ordinal_num
+# - year
+# - currency
+@app.get("/num2words")
+def _num2words(num: int, lang: str, converter: str = "cardinal"):
+    return {"words": num2words(num, lang=lang, to=converter)}
 
 
 @app.get("/tts/speakers")
