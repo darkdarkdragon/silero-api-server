@@ -10,3 +10,4 @@ sessions
 *.pt
 *.mp3
 *.wav
+Makefile
