@@ -1,9 +1,9 @@
-fastapi==0.99.0
+fastapi==0.111.0
 loguru==0.7.0
 pydantic==1.10.7
 python-dotenv==1.0.0
-torch==2.0.0
-torchaudio==2.0.1
+torch==2.3.0
+torchaudio==2.3.0
 uvicorn
 soundfile
 numpy
