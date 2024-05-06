@@ -11,3 +11,4 @@ sessions
 *.mp3
 *.wav
 Makefile
+env
