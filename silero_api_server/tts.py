@@ -10,9 +10,10 @@ from loguru import logger
 from pydub import AudioSegment
 
 available_models = {
+    # 'ua': 'https://models.silero.ai/models/tts/ua/v3_ua.pt',
     'en': 'https://models.silero.ai/models/tts/en/v3_en.pt',
     'es': 'https://models.silero.ai/models/tts/es/v3_es.pt',
-    'ua': 'https://models.silero.ai/models/tts/ua/v3_ua.pt',
+    'ua': 'https://models.silero.ai/models/tts/ua/v4_ua.pt',
 }
 
 class SileroTtsService:
@@ -38,6 +39,8 @@ class SileroTtsService:
                 logger.warning(f"First run, downloading Silero model for {lang} language. This could take some time...")
                 torch.hub.download_url_to_file(url, file_name)
                 logger.info(f"Model for {lang} language download completed.")
+                self.models[lang] = torch.package.PackageImporter(file_name).load_pickle("tts_models", "model")
+                self.models[lang].to(self.device)
             else:
                 self.models[lang] = torch.package.PackageImporter(file_name).load_pickle("tts_models", "model")
                 self.models[lang].to(self.device)
