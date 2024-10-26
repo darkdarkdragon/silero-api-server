@@ -128,8 +128,10 @@ def generate(voice: Voice) -> FileResponse:
         voice.language = "ua"
     # Clean elipses
     voice.text = voice.text.replace("*", "")
-    try:
+    # try:
+    if 1:
         wav_file_name = tempfile.mktemp(suffix=".wav")
+        logger.info(f"Gen 001 in {voice.language}")
         if voice.session:
             audio = tts_service.generate(
                 voice.language,
@@ -147,24 +149,30 @@ def generate(voice: Voice) -> FileResponse:
                 audio_file_path=wav_file_name,
                 use_ssml=voice.use_ssml,
             )
+        logger.info(f"Gen 002 in {voice.language}")
         mp3_file_name = tempfile.mktemp(suffix=".mp3")
+        logger.info(f"Gen 003 in {voice.language}")
         raw = AudioSegment.from_wav(audio)
+        logger.info(f"Gen 004 in {voice.language}")
         raw.export(mp3_file_name, format="mp3")
         os.unlink(audio)
+        logger.info(f"Gen 005 in {voice.language}")
         task = BackgroundTask(remove_file, mp3_file_name)
         md5, sha256 = calculate_hashes(mp3_file_name)
+        logger.info(f"Gen 006 in {voice.language}")
         duration_in_milliseconds = len(raw)
         headers = {
             "duration": str(duration_in_milliseconds),
             "md5": md5,
             "sha256": sha256,
         }
+        logger.info(f"End Generating text using speaker {voice.speaker} in {voice.language}")
         return FileResponse(
             mp3_file_name, media_type="audio/mpeg", headers=headers, background=task
         )
-    except Exception as e:
-        logger.error(e)
-        return HTTPException(500, voice.speaker)
+    # except Exception as e:
+    #     logger.error(e)
+    #     return HTTPException(500, voice.speaker)
 
 
 # @app.get("/tts/sample")
